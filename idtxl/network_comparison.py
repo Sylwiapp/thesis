@@ -1016,7 +1016,7 @@ class NetworkComparison(NetworkAnalysis):
         self.settings["local_values"] = False
         self.settings.setdefault("verbose", True)
         self.settings.setdefault("n_perm_comp", 500)
-        self.settings.setdefault("alpha_comp", 0.05)
+        self.settings.setdefault("alpha_comp", 0.05)    
         self.settings.setdefault("tail_comp", "two")
         self.settings.setdefault("permute_in_time", False)
         stats.check_n_perm(self.settings["n_perm_comp"], self.settings["alpha_comp"])
