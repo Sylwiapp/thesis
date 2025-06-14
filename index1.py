@@ -26,19 +26,11 @@ else:
 network_analysis = MultivariateTE()
 network_analysis.set_device(device)
 
-# Find the highest numbered log file
-log_files = glob.glob('logs_*.txt')
-highest_num = 0
-for file in log_files:
-    num = int(file.split('_')[1].split('.')[0])
-    if num > highest_num:
-        highest_num = num
-
 # Increment the number for the new log file
-new_num = highest_num + 1
+
 
 # Open the new log file for writing
-sys.stdout = open(f"logs_{new_num}.txt", "w")
+sys.stdout = open(f"logs_x.txt", "w")
 
 
 # Rest of the code...
@@ -51,9 +43,9 @@ eeg = loadRawEEG(srcDir, subCode, cond)
 
 eeg.crop(tmin=11546 / samplingRate, tmax=22771 / samplingRate)
 
-epochLengthMs = 0
+epochLengthMs = 1000
 # optionally narrow down epoch selection (for faster testing)
-# epochIndicesList = range(100, 111)
+epochIndicesList = range(100, 111)
 if epochLengthMs > 0:
     eeg = make_fixed_length_epochs(eeg, duration=epochLengthMs / 1000, preload=True)  # preload=False ?  
     data = adjustSignalToIDTxl(eeg, containesEpochedData=True, epochIndices=epochIndicesList)
@@ -86,7 +78,7 @@ moving_te_settings = {
     "targets": [1], #,],   czy dobrze robie i oba sa target i source?     #ustaw tu for ze jedna liczba jest targetem, a reszta sourcem i potem daleej w forze, ze kolejny targetem jest kolejnym i reszta sorcem
     #funkcja set do tego 
 #ile czasu 
-    "sources": [2,3,4,5,6,7,12,13,14,15,16,23,24,25,26,27,29,31],  # list of sources
+    "sources": [2,3],#,4,5,6,7,12,13,14,15,16,23,24,25,26,27,29,31],  # list of sources
     "cmi_estimator": "JidtGaussianCMI", #box-kernel - biased, kraskov- slower, best
     "fdr_correction": True,
 }
@@ -118,15 +110,13 @@ for target in moving_te_settings["targets"]:
         )
 
 
-# # Plot inferred network to console and via matplotlib for the last window
-# resultList.print_edge_list(weights='max_te_lag', fdr=False)
-# plot_network(results=resultList, weights='max_te_lag', fdr=False)
-# plt.show()
-# input('Script ended. Press ENTER ...')
+# Plot inferred network to console and via matplotlib for the last window
+resultList.print_edge_list(weights='max_te_lag', fdr=False)
+plot_network(results=resultList, weights='max_te_lag', fdr=False)
+plt.show()
+input('Script ended. Press ENTER ...')
 
 #zrob rest i oczy otwarte
 #markery w plikach 
-
-#dla jednego chłopka kod uruchamia sie na te parametry, podzielony 
 
 # przetestowac transfer entrophy na dluzszym sygnale tj np 5sekundowym 
